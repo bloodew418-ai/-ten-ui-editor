@@ -1,0 +1,17 @@
+{
+  "name": "TEN UI EDITOR",
+  "short_name": "TEN UI",
+  "description": "スマホで部品の位置とサイズを直接調整し、PNGとJSONで渡すための簡易エディタ",
+  "lang": "ja",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#12141a",
+  "theme_color": "#12141a",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
