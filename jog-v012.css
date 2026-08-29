@@ -1,0 +1,22 @@
+/* TEN UI EDITOR v0.1.2 — quarter jog override */
+.quick-menu{display:none!important}
+.quick-fab{right:16px!important;bottom:calc(18px + env(safe-area-inset-bottom))!important;width:56px!important;height:56px!important;z-index:186!important;transition:opacity .15s,transform .15s,background .15s,color .15s!important}
+.quick-fab.jog-open{opacity:0!important;pointer-events:none!important;transform:scale(.82)!important}
+#tenJog{position:fixed;width:340px;height:340px;right:-170px;bottom:calc(-170px + env(safe-area-inset-bottom));z-index:185;border-radius:50%;opacity:0;pointer-events:none;transition:opacity .16s ease;touch-action:none}
+#tenJog.open{opacity:1;pointer-events:auto}
+#tenJogRing{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,#1b1e26 0deg 20deg,#242936 20deg 40deg);-webkit-mask:radial-gradient(circle,transparent 0 82px,#000 84px 166px,transparent 168px);mask:radial-gradient(circle,transparent 0 82px,#000 84px 166px,transparent 168px);box-shadow:0 0 0 1px rgba(255,255,255,.05),0 8px 28px rgba(0,0,0,.5)}
+.ten-jog-item{position:absolute;width:72px;height:58px;margin:-29px 0 0 -36px;border:0;background:transparent;color:#e8eaf0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;line-height:1.05;text-align:center;touch-action:none;padding:0}
+.ten-jog-item b{font-size:21px;line-height:1;color:#ffb23f;font-weight:700}
+.ten-jog-item.active{color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.55)}
+.ten-jog-item.active b{background:#ffb23f;color:#1a1206;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+#tenJogClose{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;border:1px solid #7a4b13;background:#ffb23f;color:#1a1206;font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.42)}
+#tenJogHint{position:absolute;left:42px;top:42px;color:#fff;font-size:11px;opacity:.72;pointer-events:none;white-space:nowrap}
+#quickSheet{z-index:190!important}
+body.ten-qsheet .quick-fab,body.ten-qsheet #tenJog{opacity:0!important;pointer-events:none!important}
+.ten-qrow{display:grid;grid-template-columns:42px 58px 1fr;align-items:center;gap:8px}
+.ten-qrow label{font-size:12px;color:#98a0b4}
+.ten-qval{background:#232733;border:1px solid #31374a;border-radius:8px;color:#e8eaf0;text-align:center;padding:7px 4px;font-size:14px;font-variant-numeric:tabular-nums}
+.ten-qrow input[type=range]{height:34px;width:100%;accent-color:#ffb23f}
+.ten-qcolor{display:grid;grid-template-columns:70px 54px 1fr;align-items:center;gap:10px;padding:4px 0}
+.ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:54px;height:40px;border-radius:10px}.ten-qcolor code{font-size:12px;color:#98a0b4}
+@media(min-width:700px){#tenJog{right:-170px}.quick-fab{right:28px!important}}
