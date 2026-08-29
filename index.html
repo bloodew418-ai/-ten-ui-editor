@@ -11,12 +11,21 @@
 <script>
 (function(){
   var css='jog-v012.css', js='jog-v012.js';
-  fetch('./index-v0.1.1.html',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('core');return r.text();}).then(function(html){
-    if(html.indexOf(css)<0) html=html.replace('</head>','<link rel="stylesheet" href="'+css+'"></head>');
-    html=html.replace('<span>v0.1.1</span>','<span>v0.1.4</span>');
-    if(html.indexOf('<script src="'+js+'"></script>')<0) html=html.replace('</body>','<script src="'+js+'"><\/script></body>');
-    document.open();document.write(html);document.close();
-  }).catch(function(){location.replace('./index-v0.1.1.html');});
+  fetch('./index-v0.1.1.html',{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('core');return r.text();})
+    .then(function(html){
+      if(html.indexOf(css)<0){
+        html=html.replace('</head>','<link rel="stylesheet" href="'+css+'"></head>');
+      }
+      html=html.replace('<span>v0.1.1</span>','<span>v0.1.4</span>');
+      if(html.indexOf(js)<0){
+        html=html.replace('</body>','<script src="'+js+'"><'+'/script></body>');
+      }
+      document.open();
+      document.write(html);
+      document.close();
+    })
+    .catch(function(){location.replace('./index-v0.1.1.html');});
 })();
 </script>
 </body>
