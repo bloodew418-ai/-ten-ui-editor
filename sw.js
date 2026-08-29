@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell + v0.1.2 jog injector */
-var CACHE = "ten-ui-editor-v2";
+/* TEN UI EDITOR — offline shell + v0.1.3 jog injector */
+var CACHE = "ten-ui-editor-v3";
 var ASSETS = [
   "./",
   "./index.html",
