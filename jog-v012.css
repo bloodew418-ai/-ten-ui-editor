@@ -36,13 +36,24 @@ body.ten-qsheet #tenJog{opacity:.92;pointer-events:auto;transform:translateY(cal
 .ten-jog-item.active{color:#fff}
 .ten-jog-item.active b{background:#ffb23f;color:#1a1206;width:34px;height:34px;border-radius:50%}
 .ten-jog-item.pressed{filter:brightness(1.18)}
-#quickSheet{z-index:200!important}
-.ten-qrow{display:grid;grid-template-columns:42px 58px 1fr;align-items:center;gap:8px}
+#quickSheet{
+  z-index:200!important;
+  bottom:var(--ten-bottom)!important;
+  padding-bottom:calc(14px + env(safe-area-inset-bottom))!important;
+}
+.quick-controls{gap:6px!important}
+.ten-qrow{
+  display:grid;grid-template-columns:42px 58px 1fr;align-items:center;gap:8px;
+  min-height:52px;
+}
 .ten-qrow label{font-size:12px;color:#98a0b4}
 .ten-qval{background:#232733;border:1px solid #31374a;border-radius:8px;color:#e8eaf0;text-align:center;padding:7px 4px;font-size:14px;font-variant-numeric:tabular-nums}
-.ten-qrow input[type=range]{height:34px;width:100%;accent-color:#ffb23f}
-.ten-qcolor{display:grid;grid-template-columns:70px 54px 1fr;align-items:center;gap:10px;padding:4px 0}
-.ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:54px;height:40px;border-radius:10px}.ten-qcolor code{font-size:12px;color:#98a0b4}
-.ten-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0}
-.ten-order button{min-height:44px;border:1px solid #31374a;border-radius:10px;background:#232733;color:#e8eaf0;font-size:14px}
+.ten-qrow input[type=range]{
+  height:48px!important;min-height:48px!important;width:100%!important;margin:0!important;
+  padding:7px 0!important;accent-color:#ffb23f;pointer-events:auto!important;touch-action:pan-x;
+}
+.ten-qcolor{display:grid;grid-template-columns:70px 54px 1fr;align-items:center;gap:10px;padding:8px 0;min-height:56px}
+.ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:54px;height:44px;border-radius:10px;pointer-events:auto;touch-action:manipulation}.ten-qcolor code{font-size:12px;color:#98a0b4}
+.ten-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0}
+.ten-order button{min-height:48px;border:1px solid #31374a;border-radius:10px;background:#232733;color:#e8eaf0;font-size:14px;touch-action:manipulation}
 @media(min-width:700px){#tenJog{right:-170px}.quick-fab{right:28px!important}}
