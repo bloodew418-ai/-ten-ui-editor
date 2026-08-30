@@ -98,10 +98,7 @@ function boot(){
     var lab=document.createElement('label');lab.textContent=label;var val=document.createElement('div');val.className='ten-qval';val.textContent=Math.round(Number(src.value)||0);
     var rng=document.createElement('input');rng.type='range';rng.min=src.min;rng.max=src.max;rng.step=src.step||1;rng.value=src.value;
     var rangePointer=null;
-    rng.addEventListener('pointerdown',function(ev){
-      rangePointer=ev.pointerId;ev.preventDefault();ev.stopPropagation();document.body.classList.add('ten-range-drag');
-      try{rng.setPointerCapture(ev.pointerId)}catch(_){}setRangeFromPointer(rng,src,val,ev,false);
-    });
+    rng.addEventListener('pointerdown',function(ev){rangePointer=ev.pointerId;ev.preventDefault();ev.stopPropagation();document.body.classList.add('ten-range-drag');try{rng.setPointerCapture(ev.pointerId)}catch(_){}setRangeFromPointer(rng,src,val,ev,false)});
     rng.addEventListener('pointermove',function(ev){if(rangePointer!==ev.pointerId)return;ev.preventDefault();ev.stopPropagation();setRangeFromPointer(rng,src,val,ev,false)});
     rng.addEventListener('pointerup',function(ev){if(rangePointer!==ev.pointerId)return;ev.preventDefault();ev.stopPropagation();setRangeFromPointer(rng,src,val,ev,true);try{rng.releasePointerCapture(ev.pointerId)}catch(_){}rangePointer=null;document.body.classList.remove('ten-range-drag')});
     rng.addEventListener('pointercancel',function(){rangePointer=null;document.body.classList.remove('ten-range-drag')});
@@ -129,32 +126,18 @@ function boot(){
     else if(mode==='order'){title.textContent='重ね順';makeOrder()}
     sheet.classList.add('open');document.body.classList.add('ten-qsheet');fab.classList.add('sheet-open');measureSheet();
   }
-  function choose(mode){
-    var idx=ITEMS.findIndex(function(it){return it.m===mode});if(idx>=0)selectedIndex=idx;draw();
-    if(mode==='detail'){closeSheet();closeJog();var p=$('panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});return}
-    showSheet(mode);
-  }
+  function choose(mode){var idx=ITEMS.findIndex(function(it){return it.m===mode});if(idx>=0)selectedIndex=idx;draw();if(mode==='detail'){closeSheet();closeJog();var p=$('panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});return}showSheet(mode)}
   function indexFromTarget(target){var b=target.closest&&target.closest('.ten-jog-item');return b?Number(b.dataset.j):-1}
-  function beginGesture(ev){
-    if(drag||ev.pointerType==='mouse'&&ev.button!==0)return;
-    drag=true;moved=false;pointerId=ev.pointerId;startX=ev.clientX;startY=ev.clientY;startT=performance.now();cacheCenter();startA=angle(ev);startR=rot;pressedIndex=indexFromTarget(ev.target);draw();
-    try{jog.setPointerCapture(pointerId)}catch(_){}
-  }
-  function moveGesture(ev){
-    if(!drag||ev.pointerId!==pointerId)return;var dx=ev.clientX-startX,dy=ev.clientY-startY,px=Math.hypot(dx,dy);
-    if(!moved&&px>TAP_PX){moved=true;pressedIndex=-1}
-    if(moved){ev.preventDefault();rot=clamp(startR+shortDelta(angle(ev),startA),ROT_MIN,ROT_MAX);draw()}
-  }
-  function endGesture(ev){
-    if(!drag||ev.pointerId!==pointerId)return;var duration=performance.now()-startT,idx=indexFromTarget(ev.target),wasMoved=moved;
-    drag=false;try{jog.releasePointerCapture(pointerId)}catch(_){}pointerId=null;pressedIndex=-1;draw();
-    if(!wasMoved&&duration<=TAP_MS&&idx>=0){choose(ITEMS[idx].m)}else snap();
-  }
+  function beginGesture(ev){if(drag||ev.pointerType==='mouse'&&ev.button!==0)return;drag=true;moved=false;pointerId=ev.pointerId;startX=ev.clientX;startY=ev.clientY;startT=performance.now();cacheCenter();startA=angle(ev);startR=rot;pressedIndex=indexFromTarget(ev.target);draw();try{jog.setPointerCapture(pointerId)}catch(_){}}
+  function moveGesture(ev){if(!drag||ev.pointerId!==pointerId)return;var dx=ev.clientX-startX,dy=ev.clientY-startY,px=Math.hypot(dx,dy);if(!moved&&px>TAP_PX){moved=true;pressedIndex=-1}if(moved){ev.preventDefault();rot=clamp(startR+shortDelta(angle(ev),startA),ROT_MIN,ROT_MAX);draw()}}
+  function endGesture(ev){if(!drag||ev.pointerId!==pointerId)return;var duration=performance.now()-startT,idx=indexFromTarget(ev.target),wasMoved=moved;drag=false;try{jog.releasePointerCapture(pointerId)}catch(_){}pointerId=null;pressedIndex=-1;draw();if(!wasMoved&&duration<=TAP_MS&&idx>=0){choose(ITEMS[idx].m)}else snap()}
   function cancelGesture(){if(!drag)return;drag=false;pointerId=null;pressedIndex=-1;snap()}
-  var fabDown=null;
-  fab.addEventListener('pointerdown',function(ev){if(fab.disabled)return;fabDown={id:ev.pointerId,x:ev.clientX,y:ev.clientY};try{fab.setPointerCapture(ev.pointerId)}catch(_){}});
-  fab.addEventListener('pointerup',function(ev){if(!fabDown||fabDown.id!==ev.pointerId)return;var d=Math.hypot(ev.clientX-fabDown.x,ev.clientY-fabDown.y);fabDown=null;if(d<=12){ev.preventDefault();ev.stopPropagation();toggleJog()}});
-  fab.addEventListener('pointercancel',function(){fabDown=null});
+  var fabPointer=null;
+  fab.style.touchAction='manipulation';
+  fab.addEventListener('pointerdown',function(ev){if(fab.disabled)return;fabPointer=ev.pointerId;ev.preventDefault();ev.stopPropagation();try{fab.setPointerCapture(ev.pointerId)}catch(_){}});
+  fab.addEventListener('pointerup',function(ev){if(fab.disabled||fabPointer!==ev.pointerId)return;ev.preventDefault();ev.stopPropagation();try{fab.releasePointerCapture(ev.pointerId)}catch(_){}fabPointer=null;toggleJog()});
+  fab.addEventListener('pointercancel',function(ev){if(fabPointer===ev.pointerId)fabPointer=null});
+  fab.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation()});
   jog.addEventListener('pointerdown',beginGesture);jog.addEventListener('pointermove',moveGesture);jog.addEventListener('pointerup',endGesture);jog.addEventListener('pointercancel',cancelGesture);
   if(close)close.addEventListener('click',function(){closeSheet();cacheCenter()});
   function anchor(){document.documentElement.style.setProperty('--ten-bottom','0px');requestAnimationFrame(cacheCenter)}
