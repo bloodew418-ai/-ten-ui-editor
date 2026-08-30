@@ -5,7 +5,7 @@
   position:fixed!important;
   right:var(--ten-fab-right)!important;
   bottom:calc(var(--ten-fab-bottom) + env(safe-area-inset-bottom))!important;
-  width:var(--ten-fab-size)!important;height:var(--ten-fab-size)!important;z-index:206!important;
+  width:var(--ten-fab-size)!important;height:var(--ten-fab-size)!important;z-index:208!important;
   transform:none!important;touch-action:manipulation!important;
   transition:background .16s ease,color .16s ease,opacity .16s ease!important;
 }
@@ -20,14 +20,13 @@
   transition:opacity .16s ease;
   touch-action:none;overflow:visible;will-change:auto;
 }
+/* Full solid disk: no page/background can show through between rings. */
 #tenJog::before{
-  content:"";position:absolute;inset:0;border:74px solid #1b1e26;border-radius:50%;
-  box-sizing:border-box;pointer-events:none;z-index:0;
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:#1b1e26;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
+  pointer-events:none;z-index:0;
 }
-#tenJog::after{
-  content:"";position:absolute;left:74px;top:74px;width:192px;height:192px;border-radius:50%;
-  background:var(--accent);pointer-events:none;z-index:2;
-}
+#tenJog::after{display:none}
 #tenJog.open{opacity:1;pointer-events:auto}
 body.ten-qsheet #tenJog{opacity:1;pointer-events:auto;transform:none!important}
 #tenJogSvg{position:absolute;inset:0;width:340px;height:340px;overflow:visible;pointer-events:none;z-index:1}
@@ -48,6 +47,24 @@ body.ten-qsheet #tenJog{opacity:1;pointer-events:auto;transform:none!important}
 .ten-jog-item.active{color:#fff;opacity:1}
 .ten-jog-item.active b{background:#ffb23f;color:#1a1206;width:34px;height:34px;border-radius:50%}
 .ten-jog-item.pressed{filter:brightness(1.18)}
+/* Middle ring: fixed undo / redo controls, matching the user's quarter-circle sketch. */
+#tenJogHistory{position:absolute;inset:0;z-index:6;pointer-events:none}
+.ten-hist{
+  position:absolute;width:56px;height:56px;margin:-28px 0 0 -28px;border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;background:#232733;color:#ffb23f;font-size:25px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;pointer-events:auto;touch-action:manipulation;
+  box-shadow:0 4px 12px rgba(0,0,0,.28);padding:0;
+}
+.ten-hist:active{transform:scale(.96)}
+.ten-hist[disabled]{opacity:.28;pointer-events:none}
+#tenRedo{left:103.5px;top:142.4px}
+#tenUndo{left:142.4px;top:103.5px}
+/* Center hub under the X closes the last remaining hole. */
+#tenJogHub{
+  position:absolute;left:122px;top:122px;width:96px;height:96px;border-radius:50%;
+  background:var(--accent);z-index:7;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(26,18,6,.28) inset;
+}
 #quickSheet{
   z-index:200!important;
   bottom:0!important;
