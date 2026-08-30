@@ -1,5 +1,5 @@
 /* TEN UI EDITOR — offline shell v0.1.4 (no HTML injection) */
-var CACHE = "ten-ui-editor-v9";
+var CACHE = "ten-ui-editor-v10";
 var ASSETS = [
   "./",
   "./index.html",
