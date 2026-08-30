@@ -27,9 +27,9 @@ function boot(){
   var centerX=0,centerY=0,pressedIndex=-1,selectedIndex=-1,snapRAF=0,lastMode='position';
   var TAP_PX=12,TAP_MS=350;
   var jog=document.createElement('div'); jog.id='tenJog'; jog.setAttribute('aria-hidden','true');
-  jog.innerHTML='<svg id="tenJogSvg" viewBox="0 0 340 340" aria-hidden="true"><g id="tenJogSegments"></g></svg><div id="tenJogItems"></div>';
+  jog.innerHTML='<svg id="tenJogSvg" viewBox="0 0 340 340" aria-hidden="true"><g id="tenJogSegments"></g></svg><div id="tenJogItems"></div><div id="tenJogHistory"><button id="tenRedo" class="ten-hist" type="button" aria-label="進む">↷</button><button id="tenUndo" class="ten-hist" type="button" aria-label="戻る">↶</button></div><div id="tenJogHub" aria-hidden="true"></div>';
   document.body.appendChild(jog);
-  var segGroup=$('tenJogSegments'),itemBox=$('tenJogItems');
+  var segGroup=$('tenJogSegments'),itemBox=$('tenJogItems'),undoBtn=$('tenUndo'),redoBtn=$('tenRedo');
   function polar(r,a){var t=a*Math.PI/180;return [CX+Math.cos(t)*r,CY+Math.sin(t)*r]}
   function sectorPath(a0,a1,ri,ro){
     var p0=polar(ro,a0),p1=polar(ro,a1),p2=polar(ri,a1),p3=polar(ri,a0);
@@ -60,6 +60,11 @@ function boot(){
   function rawAngle(i){return BASE+i*STEP+rot}
   function isVisible(a){var n=((a%360)+360)%360;return n>=174&&n<=282}
   function activeIndex(){var target=234,bi=0,bd=999;ITEMS.forEach(function(_,i){var d=Math.abs(rawAngle(i)-target);if(d<bd){bd=d;bi=i}});return bi}
+  function syncHistory(){
+    var u=$('bUndo'),r=$('bRedo');
+    if(undoBtn)undoBtn.disabled=!u||!!u.disabled;
+    if(redoBtn)redoBtn.disabled=!r||!!r.disabled;
+  }
   function draw(){
     segGroup.setAttribute('transform','rotate('+rot+' '+CX+' '+CY+')');
     var ai=selectedIndex>=0?selectedIndex:activeIndex();
@@ -70,6 +75,7 @@ function boot(){
       b.classList.toggle('active',i===ai);b.classList.toggle('pressed',i===pressedIndex);
     });
     Array.prototype.forEach.call(segGroup.querySelectorAll('.ten-jog-seg'),function(p,i){p.classList.toggle('active',i===ai)});
+    syncHistory();
   }
   function cacheCenter(){var r=jog.getBoundingClientRect();centerX=r.left+r.width/2;centerY=r.top+r.height/2}
   function angle(ev){return Math.atan2(ev.clientY-centerY,ev.clientX-centerX)*180/Math.PI}
@@ -128,10 +134,17 @@ function boot(){
   }
   function choose(mode){var idx=ITEMS.findIndex(function(it){return it.m===mode});if(idx>=0)selectedIndex=idx;draw();if(mode==='detail'){closeSheet();closeJog();var p=$('panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});return}showSheet(mode)}
   function indexFromTarget(target){var b=target.closest&&target.closest('.ten-jog-item');return b?Number(b.dataset.j):-1}
-  function beginGesture(ev){if(drag||ev.pointerType==='mouse'&&ev.button!==0)return;drag=true;moved=false;pointerId=ev.pointerId;startX=ev.clientX;startY=ev.clientY;startT=performance.now();cacheCenter();startA=angle(ev);startR=rot;pressedIndex=indexFromTarget(ev.target);draw();try{jog.setPointerCapture(pointerId)}catch(_){}}
+  function beginGesture(ev){if(ev.target.closest&&ev.target.closest('.ten-hist'))return;if(drag||ev.pointerType==='mouse'&&ev.button!==0)return;drag=true;moved=false;pointerId=ev.pointerId;startX=ev.clientX;startY=ev.clientY;startT=performance.now();cacheCenter();startA=angle(ev);startR=rot;pressedIndex=indexFromTarget(ev.target);draw();try{jog.setPointerCapture(pointerId)}catch(_){}}
   function moveGesture(ev){if(!drag||ev.pointerId!==pointerId)return;var dx=ev.clientX-startX,dy=ev.clientY-startY,px=Math.hypot(dx,dy);if(!moved&&px>TAP_PX){moved=true;pressedIndex=-1}if(moved){ev.preventDefault();rot=clamp(startR+shortDelta(angle(ev),startA),ROT_MIN,ROT_MAX);draw()}}
   function endGesture(ev){if(!drag||ev.pointerId!==pointerId)return;var duration=performance.now()-startT,idx=indexFromTarget(ev.target),wasMoved=moved;drag=false;try{jog.releasePointerCapture(pointerId)}catch(_){}pointerId=null;pressedIndex=-1;draw();if(!wasMoved&&duration<=TAP_MS&&idx>=0){choose(ITEMS[idx].m)}else snap()}
   function cancelGesture(){if(!drag)return;drag=false;pointerId=null;pressedIndex=-1;snap()}
+  function bindHistory(btn,srcId){
+    if(!btn)return;
+    btn.addEventListener('pointerdown',function(ev){ev.stopPropagation()});
+    btn.addEventListener('pointerup',function(ev){ev.stopPropagation()});
+    btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();var src=$(srcId);if(src&&!src.disabled)src.click();requestAnimationFrame(draw)});
+  }
+  bindHistory(undoBtn,'bUndo');bindHistory(redoBtn,'bRedo');
   var fabPointer=null;
   fab.style.touchAction='manipulation';
   fab.addEventListener('pointerdown',function(ev){if(fab.disabled)return;fabPointer=ev.pointerId;ev.preventDefault();ev.stopPropagation();try{fab.setPointerCapture(ev.pointerId)}catch(_){}});
