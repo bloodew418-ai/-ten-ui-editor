@@ -17,15 +17,19 @@
   transition:opacity .16s ease,transform .20s ease;
   touch-action:none;overflow:visible;will-change:transform;
 }
+#tenJog::before{
+  content:"";position:absolute;inset:0;border:74px solid #1b1e26;border-radius:50%;
+  box-sizing:border-box;pointer-events:none;z-index:0;
+}
 #tenJog.open{opacity:1;pointer-events:auto}
 body.ten-qsheet #tenJog{opacity:.92;pointer-events:auto;transform:translateY(calc(-1 * var(--ten-sheet-h)))}
-#tenJogSvg{position:absolute;inset:0;width:340px;height:340px;overflow:visible;pointer-events:none}
+#tenJogSvg{position:absolute;inset:0;width:340px;height:340px;overflow:visible;pointer-events:none;z-index:1}
 #tenJogSegments{will-change:transform}
 .ten-jog-seg{stroke:rgba(255,255,255,.11);stroke-width:1.5}
 .ten-jog-seg.a{fill:#1b1e26}.ten-jog-seg.b{fill:#222733}
 .ten-jog-seg.active{fill:rgba(255,178,63,.18);stroke:rgba(255,178,63,.72);stroke-width:2}
-.ten-jog-cap{stroke:rgba(255,255,255,.22);stroke-width:2;fill:none}
-#tenJogItems{position:absolute;inset:0;pointer-events:none}
+.ten-jog-cap{display:none}
+#tenJogItems{position:absolute;inset:0;pointer-events:none;z-index:2}
 .ten-jog-item{
   position:absolute;width:56px;height:70px;margin:-35px 0 0 -28px;
   border:0;background:transparent;color:#98a0b4;display:flex;flex-direction:column;
