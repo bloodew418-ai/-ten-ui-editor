@@ -2,47 +2,50 @@
 :root{--ten-bottom:0px;--ten-sheet-h:0px}
 .quick-menu{display:none!important}
 .quick-fab{
+  position:fixed!important;
   right:16px!important;
-  bottom:calc(18px + var(--ten-bottom) + env(safe-area-inset-bottom))!important;
-  width:56px!important;height:56px!important;z-index:196!important;
-  transition:transform .16s ease,background .16s ease,color .16s ease,opacity .16s ease!important;
+  bottom:calc(18px + env(safe-area-inset-bottom))!important;
+  width:56px!important;height:56px!important;z-index:206!important;
+  transform:none!important;
+  transition:background .16s ease,color .16s ease,opacity .16s ease!important;
 }
 .quick-fab.jog-open{opacity:1!important;pointer-events:auto!important;transform:none!important;background:var(--accent)!important;color:var(--accent-ink)!important}
-.quick-fab.sheet-open{transform:translateY(calc(-1 * var(--ten-sheet-h)))!important}
+.quick-fab.sheet-open{transform:none!important}
 #tenJog{
-  position:fixed;width:340px;height:340px;
-  right:-170px;
-  bottom:calc(-170px + var(--ten-bottom) + env(safe-area-inset-bottom));
-  z-index:195;border-radius:50%;opacity:0;pointer-events:none;
-  transition:opacity .16s ease,transform .20s ease;
-  touch-action:none;overflow:visible;will-change:transform;
+  position:fixed!important;width:340px;height:340px;
+  right:0!important;bottom:0!important;
+  transform:translate(50%,50%)!important;
+  z-index:205;border-radius:50%;opacity:0;pointer-events:none;
+  transition:opacity .16s ease;
+  touch-action:none;overflow:visible;will-change:auto;
 }
 #tenJog::before{
   content:"";position:absolute;inset:0;border:74px solid #1b1e26;border-radius:50%;
   box-sizing:border-box;pointer-events:none;z-index:0;
 }
 #tenJog.open{opacity:1;pointer-events:auto}
-body.ten-qsheet #tenJog{opacity:.92;pointer-events:auto;transform:translateY(calc(-1 * var(--ten-sheet-h)))}
+body.ten-qsheet #tenJog{opacity:1;pointer-events:auto;transform:translate(50%,50%)!important}
 #tenJogSvg{position:absolute;inset:0;width:340px;height:340px;overflow:visible;pointer-events:none;z-index:1}
 #tenJogSegments{will-change:transform}
-.ten-jog-seg{stroke:rgba(255,255,255,.11);stroke-width:1.5}
+.ten-jog-seg{stroke:rgba(255,255,255,.08);stroke-width:1.5;opacity:.42;transition:opacity .12s ease,fill .12s ease,stroke .12s ease}
 .ten-jog-seg.a{fill:#1b1e26}.ten-jog-seg.b{fill:#222733}
-.ten-jog-seg.active{fill:rgba(255,178,63,.18);stroke:rgba(255,178,63,.72);stroke-width:2}
+.ten-jog-seg.active{fill:rgba(255,178,63,.22);stroke:rgba(255,178,63,.9);stroke-width:2;opacity:1}
 .ten-jog-cap{display:none}
 #tenJogItems{position:absolute;inset:0;pointer-events:none;z-index:2}
 .ten-jog-item{
   position:absolute;width:56px;height:70px;margin:-35px 0 0 -28px;
-  border:0;background:transparent;color:#98a0b4;display:flex;flex-direction:column;
+  border:0;background:transparent;color:rgba(152,160,180,.42);display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:600;line-height:1.1;
   text-align:center;touch-action:none;padding:0;pointer-events:auto;
+  opacity:.58;transition:opacity .12s ease,color .12s ease;
 }
-.ten-jog-item b{font-size:22px;line-height:1;color:#ffb23f;font-weight:700;min-height:24px;display:flex;align-items:center;justify-content:center}
-.ten-jog-item.active{color:#fff}
+.ten-jog-item b{font-size:22px;line-height:1;color:rgba(255,178,63,.48);font-weight:700;min-height:24px;display:flex;align-items:center;justify-content:center;transition:background .12s ease,color .12s ease}
+.ten-jog-item.active{color:#fff;opacity:1}
 .ten-jog-item.active b{background:#ffb23f;color:#1a1206;width:34px;height:34px;border-radius:50%}
 .ten-jog-item.pressed{filter:brightness(1.18)}
 #quickSheet{
   z-index:200!important;
-  bottom:var(--ten-bottom)!important;
+  bottom:0!important;
   padding-bottom:calc(14px + env(safe-area-inset-bottom))!important;
   overscroll-behavior:contain;
 }
@@ -64,4 +67,4 @@ body.ten-range-drag #quickSheet{touch-action:none}
 .ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:54px;height:44px;border-radius:10px;pointer-events:auto;touch-action:manipulation}.ten-qcolor code{font-size:12px;color:#98a0b4}
 .ten-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0}
 .ten-order button{min-height:48px;border:1px solid #31374a;border-radius:10px;background:#232733;color:#e8eaf0;font-size:14px;touch-action:manipulation}
-@media(min-width:700px){#tenJog{right:-170px}.quick-fab{right:28px!important}}
+@media(min-width:700px){.quick-fab{right:28px!important}}
