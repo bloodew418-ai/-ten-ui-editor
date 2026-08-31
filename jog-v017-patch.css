@@ -1,4 +1,4 @@
-/* TEN UI EDITOR v0.1.7 patch — larger closed menu, unchanged open wheel, one-tap number input */
+/* TEN UI EDITOR v0.1.9 patch — larger closed menu, unchanged open wheel, one-tap number input */
 :root{--ten-closed-fab-size:84px}
 
 /* Only the CLOSED quarter-menu grows. The opened three-layer wheel remains 340px / radius 170. */
@@ -13,7 +13,14 @@
   font-size:21px!important;
 }
 
-/* Retire the v0.1.6 two-stage number popup. v0.1.7 uses the one-tap editor below. */
+/* The first outer item (位置) lives at the bottom-left edge of the visible quarter.
+   Pin its centre slightly above the viewport edge so the entire 68px tab remains visible.
+   This changes only the label/tab position; the 340px wheel and three ring radii are untouched. */
+#tenJog.open #tenJogItems .ten-jog-item[data-j="0"]{
+  top:128px!important;
+}
+
+/* Retire the v0.1.6 two-stage number popup. v0.1.7+ uses the one-tap editor below. */
 #tenNumEditor{display:none!important}
 #tenFastNumEditor{
   position:fixed;left:50%;top:calc(100vh - 12px);z-index:420;
