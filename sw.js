@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.8 (edge-tab visibility fix) */
-var CACHE = "ten-ui-editor-v15-edge-tabs";
+/* TEN UI EDITOR — offline shell v0.1.9 (position tab edge fix) */
+var CACHE = "ten-ui-editor-v16-position-edge";
 var ASSETS = [
   "./",
   "./index.html",
