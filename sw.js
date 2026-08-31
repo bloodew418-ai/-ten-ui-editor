@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.7 (larger menu + one-step history + one-tap number input) */
-var CACHE = "ten-ui-editor-v14-controls";
+/* TEN UI EDITOR — offline shell v0.1.8 (edge-tab visibility fix) */
+var CACHE = "ten-ui-editor-v15-edge-tabs";
 var ASSETS = [
   "./",
   "./index.html",
