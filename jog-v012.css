@@ -1,101 +1,126 @@
-/* TEN UI EDITOR v0.1.5 — three-layer jog (outer items / middle undo-redo / inner close) */
-:root{--ten-bottom:0px;--ten-sheet-h:0px;--ten-fab-right:16px;--ten-fab-bottom:18px;--ten-fab-size:56px;--ten-fab-r:28px}
+/* TEN UI EDITOR v0.1.6 — quarter-corner menu + three-layer wheel + compact slider sheet */
+:root{--ten-sheet-h:0px;--ten-fab-size:56px}
 .quick-menu{display:none!important}
+
+/* Closed menu button: its circle centre is the viewport bottom-right corner.
+   Only the upper-left quarter of the disk is visible. */
 .quick-fab{
-  position:fixed!important;
-  right:var(--ten-fab-right)!important;
-  bottom:calc(var(--ten-fab-bottom) + env(safe-area-inset-bottom))!important;
-  width:var(--ten-fab-size)!important;height:var(--ten-fab-size)!important;z-index:206!important;
+  position:fixed!important;right:0!important;bottom:0!important;
+  width:var(--ten-fab-size)!important;height:var(--ten-fab-size)!important;
+  z-index:208!important;margin:0!important;padding:0!important;
+  border-radius:100% 0 0 0!important;
+  border:1px solid rgba(255,255,255,.10)!important;border-right:0!important;border-bottom:0!important;
+  background:#232733!important;color:var(--accent)!important;
+  box-shadow:-5px -5px 16px rgba(0,0,0,.28)!important;
   transform:none!important;touch-action:manipulation!important;
-  transition:background .16s ease,color .16s ease,opacity .16s ease!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font-size:21px!important;line-height:1!important;
+  transition:background .14s ease,color .14s ease,opacity .14s ease!important;
 }
-/* Open state: the FAB is the inner close area, so it must read as part of the ring,
-   not as a floating orange pill. Same fill as the inner plate, orange glyph only. */
+.quick-fab[disabled]{opacity:.34!important;pointer-events:none!important}
 .quick-fab.jog-open{
   opacity:1!important;pointer-events:auto!important;transform:none!important;
   background:#232733!important;color:var(--accent)!important;
-  border-color:transparent!important;box-shadow:none!important;
+  border-color:rgba(255,255,255,.10)!important;box-shadow:none!important;
 }
 .quick-fab.sheet-open{transform:none!important}
+
+/* 340px wheel shifted by exactly half its diameter: wheel centre == viewport bottom-right. */
 #tenJog{
   position:fixed!important;width:340px;height:340px;
-  right:calc(var(--ten-fab-right) + var(--ten-fab-r) - 170px)!important;
-  bottom:calc(var(--ten-fab-bottom) + env(safe-area-inset-bottom) + var(--ten-fab-r) - 170px)!important;
-  transform:none!important;
-  z-index:205;border-radius:50%;opacity:0;pointer-events:none;
-  transition:opacity .16s ease;
-  touch-action:none;overflow:visible;will-change:auto;
+  right:-170px!important;bottom:-170px!important;
+  z-index:205!important;border-radius:50%;opacity:0;pointer-events:none;
+  transition:opacity .14s ease;touch-action:none;overflow:visible;will-change:auto;
 }
 #tenJog.open{opacity:1;pointer-events:auto}
-/* pointer-events:none on an ancestor does NOT disable descendants that set their own
-   value, so the closed jog must be neutralised explicitly. */
 #tenJog:not(.open),#tenJog:not(.open) *{pointer-events:none!important}
 body.ten-qsheet #tenJog{opacity:1;pointer-events:auto;transform:none!important}
 #tenJogSvg{position:absolute;inset:0;width:340px;height:340px;overflow:visible;pointer-events:none;z-index:1}
-
-/* ---- backing plates: r0-49 / r48-97 / r96-170, overlapping by 1px so no seam ---- */
 .ten-jog-plate{pointer-events:none}
 
-/* ---- outer ring: edit items (rotates) ---- */
+/* Outer ring: editing items. */
 #tenJogSegments{will-change:transform}
-.ten-jog-seg{stroke:rgba(255,255,255,.08);stroke-width:1.5;opacity:.42;transition:opacity .12s ease,fill .12s ease,stroke .12s ease}
+.ten-jog-seg{pointer-events:none;stroke:rgba(255,255,255,.09);stroke-width:1.5;opacity:.46;transition:opacity .12s ease,fill .12s ease,stroke .12s ease}
 .ten-jog-seg.a{fill:#1b1e26}.ten-jog-seg.b{fill:#222733}
-.ten-jog-seg.active{fill:rgba(255,178,63,.22);stroke:rgba(255,178,63,.9);stroke-width:2;opacity:1}
-.ten-jog-cap{display:none}
+.ten-jog-seg.active{fill:rgba(255,178,63,.22);stroke:rgba(255,178,63,.95);stroke-width:2;opacity:1}
 
-/* ---- middle ring: undo / redo (fixed, never rotates) ---- */
+/* Middle ring: Undo / Redo. The sectors themselves are the controls. */
 #tenJogMid{pointer-events:none}
-.ten-jog-mid{
-  fill:transparent;stroke:none;
-  pointer-events:all;touch-action:manipulation;
-  transition:fill .12s ease;
-}
-.ten-jog-mid.pressed{fill:rgba(255,178,63,.22)}
+.ten-jog-mid{fill:transparent;stroke:none;pointer-events:all;touch-action:manipulation;transition:fill .12s ease}
+.ten-jog-mid.pressed{fill:rgba(255,178,63,.24)}
 .ten-jog-mid.dis{pointer-events:none}
-.ten-jog-div{fill:none;stroke:rgba(255,255,255,.10);stroke-width:1.5;pointer-events:none}
-.ten-jog-hicon{
-  fill:#ffb23f;font-size:24px;font-weight:700;text-anchor:middle;
-  pointer-events:none;transition:fill .12s ease;
-}
+.ten-jog-div{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1.4;pointer-events:none}
+.ten-jog-hicon{fill:#ffb23f;font-size:23px;font-weight:700;text-anchor:middle;pointer-events:none;transition:fill .12s ease}
 .ten-jog-hicon.dis{fill:rgba(152,160,180,.28)}
 
-/* ---- outer ring labels ---- */
+/* Outer-ring labels stay upright while only the segments rotate. */
 #tenJogItems{position:absolute;inset:0;pointer-events:none;z-index:3}
 .ten-jog-item{
-  position:absolute;width:56px;height:70px;margin:-35px 0 0 -28px;
-  border:0;background:transparent;color:rgba(152,160,180,.42);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:600;line-height:1.1;
+  position:absolute;width:56px;height:68px;margin:-34px 0 0 -28px;
+  border:0;background:transparent;color:rgba(152,160,180,.40);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:600;line-height:1.08;
   text-align:center;touch-action:none;padding:0;pointer-events:auto;
-  opacity:.58;transition:opacity .12s ease,color .12s ease;
+  opacity:.55;transition:opacity .12s ease,color .12s ease;
 }
-.ten-jog-item b{font-size:22px;line-height:1;color:rgba(255,178,63,.48);font-weight:700;min-height:24px;display:flex;align-items:center;justify-content:center;transition:background .12s ease,color .12s ease}
+.ten-jog-item b{font-size:22px;line-height:1;color:rgba(255,178,63,.46);font-weight:700;min-height:24px;display:flex;align-items:center;justify-content:center;transition:background .12s ease,color .12s ease}
 .ten-jog-item.active{color:#fff;opacity:1}
 .ten-jog-item.active b{background:#ffb23f;color:#1a1206;width:34px;height:34px;border-radius:50%}
-.ten-jog-item.pressed{filter:brightness(1.18)}
+.ten-jog-item.pressed{filter:brightness(1.15)}
 
-/* ---- bottom sheet (unchanged from v9) ---- */
+/* Slider tab: about one fifth of the viewport, and deliberately above the wheel. */
 #quickSheet{
-  z-index:200!important;
-  bottom:0!important;
-  padding-bottom:calc(14px + env(safe-area-inset-bottom))!important;
-  overscroll-behavior:contain;
+  position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;
+  height:clamp(152px,20dvh,190px)!important;min-height:152px!important;max-height:190px!important;
+  z-index:230!important;background:rgba(27,30,38,.985)!important;
+  border-top:1px solid var(--line)!important;border-radius:16px 16px 0 0!important;
+  padding:9px 12px calc(9px + env(safe-area-inset-bottom))!important;
+  box-shadow:0 -10px 28px rgba(0,0,0,.38)!important;
+  transform:translateY(110%)!important;transition:transform .18s ease!important;
+  overflow:hidden!important;overscroll-behavior:contain!important;
 }
-.quick-controls{gap:6px!important}
-.ten-qrow{
-  display:grid;grid-template-columns:42px 58px 1fr;align-items:center;gap:8px;
-  min-height:52px;
+#quickSheet.open{transform:translateY(0)!important}
+.quick-head{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:34px!important;margin-bottom:4px!important;font-size:13px!important;font-weight:700!important}
+.quick-close{
+  width:34px!important;height:34px!important;min-width:34px!important;padding:0!important;
+  border:1px solid var(--line)!important;border-radius:50%!important;background:var(--panel2)!important;
+  color:var(--ink)!important;font-size:20px!important;line-height:1!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;touch-action:manipulation!important;
 }
+.quick-controls{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;max-height:calc(100% - 40px)!important;overflow:auto!important;overscroll-behavior:contain!important}
+.ten-qrow{display:grid;grid-template-columns:38px 72px minmax(0,1fr);align-items:center;gap:8px;min-height:48px}
 .ten-qrow label{font-size:12px;color:#98a0b4}
-.ten-qval{background:#232733;border:1px solid #31374a;border-radius:8px;color:#e8eaf0;text-align:center;padding:7px 4px;font-size:14px;font-variant-numeric:tabular-nums}
-.ten-qrow input[type=range]{
-  height:48px!important;min-height:48px!important;width:100%!important;margin:0!important;
-  padding:7px 0!important;accent-color:#ffb23f;pointer-events:auto!important;
-  touch-action:none!important;user-select:none;-webkit-user-select:none;
+.ten-qval{
+  appearance:none;width:72px;height:38px;min-height:38px;padding:5px 6px;
+  background:#232733;border:1px solid #31374a;border-radius:8px;color:#e8eaf0;
+  text-align:center;font-size:15px;font-variant-numeric:tabular-nums;touch-action:manipulation;
 }
+.ten-qval:active{border-color:var(--accent)}
+.ten-qrow input[type=range]{height:44px!important;min-height:44px!important;width:100%!important;margin:0!important;padding:5px 0!important;accent-color:#ffb23f;pointer-events:auto!important;touch-action:none!important;user-select:none;-webkit-user-select:none}
 body.ten-range-drag{overscroll-behavior:none}
 body.ten-range-drag #quickSheet{touch-action:none}
-.ten-qcolor{display:grid;grid-template-columns:70px 54px 1fr;align-items:center;gap:10px;padding:8px 0;min-height:56px}
-.ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:54px;height:44px;border-radius:10px;pointer-events:auto;touch-action:manipulation}.ten-qcolor code{font-size:12px;color:#98a0b4}
-.ten-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0}
-.ten-order button{min-height:48px;border:1px solid #31374a;border-radius:10px;background:#232733;color:#e8eaf0;font-size:14px;touch-action:manipulation}
-@media(min-width:700px){:root{--ten-fab-right:28px}}
+.ten-qcolor{display:grid;grid-template-columns:64px 52px 1fr;align-items:center;gap:9px;padding:5px 0;min-height:48px}
+.ten-qcolor label{font-size:12px;color:#98a0b4}.ten-qcolor input[type=color]{width:52px;height:40px;border-radius:9px;pointer-events:auto;touch-action:manipulation}.ten-qcolor code{font-size:12px;color:#98a0b4}
+.ten-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:5px 0}
+.ten-order button{min-height:44px;border:1px solid #31374a;border-radius:10px;background:#232733;color:#e8eaf0;font-size:14px;touch-action:manipulation}
+
+/* Numeric-entry popup: appears above the software keyboard without moving the wheel/sheet layout. */
+#tenNumEditor{
+  position:fixed;left:50%;top:calc(100vh - 12px);z-index:400;
+  transform:translate(-50%,-100%);display:none;align-items:center;gap:8px;
+  padding:8px;background:rgba(27,30,38,.99);border:1px solid #31374a;border-radius:12px;
+  box-shadow:0 8px 28px rgba(0,0,0,.45);touch-action:manipulation;
+}
+#tenNumEditor.open{display:flex}
+#tenNumInput{
+  width:132px;height:44px;padding:7px 9px;border:1px solid #4b536b;border-radius:9px;
+  background:#232733;color:#e8eaf0;font-size:18px;text-align:center;outline:none;
+  -webkit-user-select:text;user-select:text;
+}
+#tenNumInput:focus{border-color:#ffb23f;box-shadow:0 0 0 1px rgba(255,178,63,.35)}
+#tenNumDone{height:44px;min-width:58px;padding:0 12px;border:0;border-radius:9px;background:#ffb23f;color:#1a1206;font-size:14px;font-weight:700;touch-action:manipulation}
+body.ten-num-editing{overscroll-behavior:none}
+
+@media(min-width:700px){
+  #quickSheet{left:50%!important;right:auto!important;width:min(520px,100vw)!important;transform:translate(-50%,110%)!important}
+  #quickSheet.open{transform:translate(-50%,0)!important}
+}
