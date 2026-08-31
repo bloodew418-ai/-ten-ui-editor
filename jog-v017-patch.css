@@ -1,4 +1,4 @@
-/* TEN UI EDITOR v0.1.10 patch — larger closed menu, unchanged open wheel, one-tap number input */
+/* TEN UI EDITOR v0.1.12 patch — larger closed menu, unchanged open wheel, one-tap number input */
 :root{--ten-closed-fab-size:84px}
 
 /* Only the CLOSED quarter-menu grows. The opened three-layer wheel remains 340px / radius 170. */
@@ -12,6 +12,10 @@
   height:56px!important;
   font-size:21px!important;
 }
+
+/* Keep every outer item visible, but move the whole label layer slightly up-left so
+   the edge items do not sit flush against the viewport. No per-item pinning/fading. */
+#tenJogItems{transform:translate(-10px,-10px)!important}
 
 /* Retire the v0.1.6 two-stage number popup. v0.1.7+ uses the one-tap editor below. */
 #tenNumEditor{display:none!important}
