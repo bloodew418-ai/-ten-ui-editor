@@ -11,6 +11,18 @@ function boot(){
   window.__TEN_JOG_017_PATCH__=true;
   var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.7';
 
+  function syncOpenSheet(){
+    if(!sheet.classList.contains('open'))return;
+    requestAnimationFrame(function(){
+      Array.prototype.forEach.call(sheet.querySelectorAll('.ten-qrow'),function(row){
+        var src=$(row.dataset.src||''),rng=row.querySelector('input[type=range]'),val=row.querySelector('.ten-qval');
+        if(!src||!rng||!val)return;
+        rng.min=src.min;rng.max=src.max;rng.step=src.step||1;rng.value=src.value;
+        val.textContent=Math.round(Number(src.value)||0);
+      });
+    });
+  }
+
   /* --- Undo / Redo: replace v0.1.6 sector listeners so one physical tap == one history step. --- */
   Array.prototype.slice.call(mid.querySelectorAll('.ten-jog-mid')).forEach(function(old){
     var el=old.cloneNode(true),state=null;
@@ -34,7 +46,7 @@ function boot(){
       state=null;el.classList.remove('pressed');
       if(Math.hypot(dx,dy)>22)return;
       var src=$(act==='undo'?'bUndo':'bRedo');
-      if(src&&!src.disabled)src.click();
+      if(src&&!src.disabled){src.click();syncOpenSheet()}
     });
     el.addEventListener('pointercancel',function(ev){
       if(!state||state.id!==ev.pointerId)return;
