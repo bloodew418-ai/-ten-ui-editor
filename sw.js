@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.6 (quarter menu + compact sheet) */
-var CACHE = "ten-ui-editor-v12-quarter-sheet";
+/* TEN UI EDITOR — offline shell v0.1.7 (larger menu + one-step history + one-tap number input) */
+var CACHE = "ten-ui-editor-v13-controls";
 var ASSETS = [
   "./",
   "./index.html",
@@ -9,7 +9,9 @@ var ASSETS = [
   "./icon-192.png",
   "./icon-512.png",
   "./jog-v012.css",
-  "./jog-v012.js"
+  "./jog-v012.js",
+  "./jog-v017-patch.css",
+  "./jog-v017-patch.js"
 ];
 self.addEventListener("install", function (e) {
   self.skipWaiting();
