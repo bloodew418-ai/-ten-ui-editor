@@ -9,7 +9,58 @@ function boot(){
   var jog=$('tenJog'),mid=$('tenJogMid'),sheet=$('quickSheet');
   if(!jog||!mid||!sheet){setTimeout(boot,30);return}
   window.__TEN_JOG_017_PATCH__=true;
-  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.10';
+  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.11';
+
+  /* Keep the outer editing tabs away from the screen edges without pinning any one item.
+     The wheel remains centred on the viewport bottom-right; only the visible item sector is narrowed.
+     Edge sectors are covered by neutral ring caps and item labels fade before reaching the edge. */
+  var itemBox=$('tenJogItems'),svg=$('tenJogSvg');
+  function polar(r,a){var t=a*Math.PI/180;return [170+Math.cos(t)*r,170+Math.sin(t)*r]}
+  function sectorPath(a0,a1,ri,ro){
+    var p0=polar(ro,a0),p1=polar(ro,a1),p2=polar(ri,a1),p3=polar(ri,a0);
+    var large=Math.abs(a1-a0)>180?1:0;
+    return 'M'+p0[0]+' '+p0[1]+' A'+ro+' '+ro+' 0 '+large+' 1 '+p1[0]+' '+p1[1]+' L'+p2[0]+' '+p2[1]+' A'+ri+' '+ri+' 0 '+large+' 0 '+p3[0]+' '+p3[1]+' Z';
+  }
+  function installEdgeCaps(){
+    if(!svg||$('tenJogEdgeCaps'))return;
+    var ns='http://www.w3.org/2000/svg',g=document.createElementNS(ns,'g');g.id='tenJogEdgeCaps';g.setAttribute('pointer-events','none');
+    [[180,201],[249,270]].forEach(function(a){
+      var p=document.createElementNS(ns,'path');p.setAttribute('d',sectorPath(a[0],a[1],96,170));p.setAttribute('fill','#1b1e26');p.setAttribute('stroke','none');g.appendChild(p);
+    });
+    svg.appendChild(g);
+  }
+  function normAngleFromItem(b){
+    var x=parseFloat(b.style.left),y=parseFloat(b.style.top);if(!Number.isFinite(x)||!Number.isFinite(y))return null;
+    var a=Math.atan2(y-170,x-170)*180/Math.PI;return (a+360)%360;
+  }
+  function edgeAlpha(a){
+    if(a<201||a>249)return 0;
+    if(a<207)return clamp((a-201)/6,0,1);
+    if(a>243)return clamp((249-a)/6,0,1);
+    return 1;
+  }
+  function refineOuterItems(){
+    if(!itemBox)return;
+    Array.prototype.forEach.call(itemBox.children,function(b){
+      var a=normAngleFromItem(b);if(a===null)return;
+      var alpha=edgeAlpha(a),op=alpha.toFixed(3),pe=alpha>=0.16?'auto':'none';
+      if(b.style.opacity!==op)b.style.opacity=op;
+      if(b.style.pointerEvents!==pe)b.style.pointerEvents=pe;
+    });
+  }
+  var edgeRAF=0;
+  function scheduleEdgeRefine(){
+    if(edgeRAF)return;
+    edgeRAF=requestAnimationFrame(function(){edgeRAF=0;refineOuterItems()});
+  }
+  installEdgeCaps();
+  if(itemBox){
+    try{
+      var edgeObs=new MutationObserver(scheduleEdgeRefine);
+      edgeObs.observe(itemBox,{subtree:true,attributes:true,attributeFilter:['style']});
+    }catch(_){}
+    scheduleEdgeRefine();
+  }
 
   function syncOpenSheet(){
     if(!sheet.classList.contains('open'))return;
