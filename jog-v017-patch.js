@@ -9,30 +9,7 @@ function boot(){
   var jog=$('tenJog'),mid=$('tenJogMid'),sheet=$('quickSheet');
   if(!jog||!mid||!sheet){setTimeout(boot,30);return}
   window.__TEN_JOG_017_PATCH__=true;
-  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.8';
-
-  /* Keep edge-positioned outer tabs fully inside the visible quarter of the viewport.
-     The wheel geometry and its 340px open footprint do not change; only label/button centres
-     are nudged inward when a tab reaches the bottom or right edge. */
-  var itemBox=$('tenJogItems');
-  function keepOuterTabsInside(){
-    if(!itemBox)return;
-    var MAX_X=136,MAX_Y=132;
-    Array.prototype.forEach.call(itemBox.children,function(b){
-      var x=parseFloat(b.style.left),y=parseFloat(b.style.top);
-      if(!Number.isFinite(x)||!Number.isFinite(y))return;
-      var nx=Math.min(x,MAX_X),ny=Math.min(y,MAX_Y);
-      if(nx!==x)b.style.left=nx+'px';
-      if(ny!==y)b.style.top=ny+'px';
-    });
-  }
-  if(itemBox){
-    try{
-      var edgeObs=new MutationObserver(function(){keepOuterTabsInside()});
-      edgeObs.observe(itemBox,{subtree:true,attributes:true,attributeFilter:['style']});
-    }catch(_){}
-    requestAnimationFrame(keepOuterTabsInside);
-  }
+  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.10';
 
   function syncOpenSheet(){
     if(!sheet.classList.contains('open'))return;
@@ -46,7 +23,7 @@ function boot(){
     });
   }
 
-  /* --- Undo / Redo: replace v0.1.6 sector listeners so one physical tap == one history step. --- */
+  /* Undo / Redo: one physical tap == one history step. */
   Array.prototype.slice.call(mid.querySelectorAll('.ten-jog-mid')).forEach(function(old){
     var el=old.cloneNode(true),state=null;
     old.parentNode.replaceChild(el,old);
@@ -77,7 +54,7 @@ function boot(){
     });
   });
 
-  /* --- One-tap direct number editor. Focus happens synchronously inside pointerdown. --- */
+  /* One-tap direct number editor. Focus happens synchronously inside pointerdown. */
   var oldEditor=$('tenNumEditor');if(oldEditor)oldEditor.style.display='none';
   var fast=document.createElement('div');
   fast.id='tenFastNumEditor';fast.setAttribute('aria-hidden','true');
