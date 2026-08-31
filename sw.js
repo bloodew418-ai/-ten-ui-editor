@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.11 (edge-safe quarter menu) */
-var CACHE = "ten-ui-editor-v18-edge-safe";
+/* TEN UI EDITOR — offline shell v0.1.12 (outer labels inset, all tabs visible) */
+var CACHE = "ten-ui-editor-v19-label-inset";
 var ASSETS = [
   "./",
   "./index.html",
