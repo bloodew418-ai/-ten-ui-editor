@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.5 (no HTML injection) */
-var CACHE = "ten-ui-editor-v10-rings";
+/* TEN UI EDITOR — offline shell v0.1.6 (quarter menu + compact sheet) */
+var CACHE = "ten-ui-editor-v12-quarter-sheet";
 var ASSETS = [
   "./",
   "./index.html",
