@@ -9,7 +9,30 @@ function boot(){
   var jog=$('tenJog'),mid=$('tenJogMid'),sheet=$('quickSheet');
   if(!jog||!mid||!sheet){setTimeout(boot,30);return}
   window.__TEN_JOG_017_PATCH__=true;
-  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.7';
+  var brand=document.querySelector('.brand span');if(brand)brand.textContent='v0.1.8';
+
+  /* Keep edge-positioned outer tabs fully inside the visible quarter of the viewport.
+     The wheel geometry and its 340px open footprint do not change; only label/button centres
+     are nudged inward when a tab reaches the bottom or right edge. */
+  var itemBox=$('tenJogItems');
+  function keepOuterTabsInside(){
+    if(!itemBox)return;
+    var MAX_X=136,MAX_Y=132;
+    Array.prototype.forEach.call(itemBox.children,function(b){
+      var x=parseFloat(b.style.left),y=parseFloat(b.style.top);
+      if(!Number.isFinite(x)||!Number.isFinite(y))return;
+      var nx=Math.min(x,MAX_X),ny=Math.min(y,MAX_Y);
+      if(nx!==x)b.style.left=nx+'px';
+      if(ny!==y)b.style.top=ny+'px';
+    });
+  }
+  if(itemBox){
+    try{
+      var edgeObs=new MutationObserver(function(){keepOuterTabsInside()});
+      edgeObs.observe(itemBox,{subtree:true,attributes:true,attributeFilter:['style']});
+    }catch(_){}
+    requestAnimationFrame(keepOuterTabsInside);
+  }
 
   function syncOpenSheet(){
     if(!sheet.classList.contains('open'))return;
@@ -97,7 +120,6 @@ function boot(){
     if(Number(src.min)<0){input.setAttribute('inputmode','text')}else{input.setAttribute('inputmode','decimal')}
     fast.classList.add('open');fast.setAttribute('aria-hidden','false');document.body.classList.add('ten-fast-num-editing');
     position();
-    /* Must stay in the same user gesture on iPhone: no RAF before focus. */
     try{input.focus({preventScroll:true})}catch(_){input.focus()}
     try{input.select()}catch(_){}
     position();
