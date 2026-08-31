@@ -1,5 +1,5 @@
-/* TEN UI EDITOR — offline shell v0.1.9 (position tab edge fix) */
-var CACHE = "ten-ui-editor-v16-position-edge";
+/* TEN UI EDITOR — offline shell v0.1.10 (quarter-wheel geometry fix) */
+var CACHE = "ten-ui-editor-v17-wheel-geometry";
 var ASSETS = [
   "./",
   "./index.html",
