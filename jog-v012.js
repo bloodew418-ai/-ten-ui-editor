@@ -28,7 +28,7 @@ function boot(){
 
   /* The wheel is a full 340px disk whose centre is placed exactly at viewport bottom-right.
      Only the upper-left quarter is therefore visible. */
-  var STEP=24, BASE=186, ROT_MIN=-120, ROT_MAX=0, R=133, CX=170, CY=170;
+  var STEP=24, BASE=201, ROT_MIN=-168, ROT_MAX=24, R=133, CX=170, CY=170;
   var R_OUT_I=96, R_OUT_O=170;
   var R_MID_I=55, R_MID_O=97;
   var R_IN=56;
