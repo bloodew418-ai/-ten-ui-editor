@@ -6,32 +6,33 @@
 <meta name="theme-color" content="#101114">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="80くじ">
-<title>ゲーム企画 80くじ</title>
+<meta name="apple-mobile-web-app-title" content="破壊80くじ">
+<title>既視感破壊 80くじ v2</title>
 <style>
 :root{color-scheme:dark;--bg:#101114;--panel:#181b20;--card:#21252c;--line:#343a45;--text:#f7f7f8;--muted:#a9b0bb;--accent:#7d6cff;--accent2:#2e294f}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Yu Gothic",sans-serif;padding:max(18px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));line-height:1.5}
-main{max-width:760px;margin:auto}h1{font-size:26px;margin:0 0 6px}.lead{color:var(--muted);font-size:14px;margin:0 0 16px}
+main{max-width:760px;margin:auto}h1{font-size:26px;margin:0 0 5px}.version{font-size:12px;color:var(--muted);font-weight:700}.lead{color:var(--muted);font-size:14px;margin:6px 0 16px}
 .panel{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:14px;margin-top:12px}
 .label{font-weight:800;font-size:15px}.status{color:var(--muted);font-size:13px;margin-top:4px}
-.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 button{appearance:none;-webkit-appearance:none;border:1px solid var(--line);background:#14171c;color:var(--text);min-height:48px;border-radius:12px;padding:10px 12px;font-size:16px;font-weight:700;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button:active{transform:scale(.985)}button.active,button.primary{background:var(--accent2);border-color:var(--accent)}button.primary{font-size:18px}
 .cards{display:grid;gap:10px;margin-top:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;grid-template-columns:36px 1fr;gap:10px}
-.num{font-size:13px;color:var(--muted);font-weight:800;padding-top:2px}.name{font-size:17px;font-weight:900}.desc{font-size:14px;color:var(--muted);margin-top:3px}
+.num{font-size:13px;color:var(--muted);font-weight:800;padding-top:2px}.cat{display:inline-block;font-size:11px;font-weight:800;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 7px;margin-bottom:5px}.name{font-size:17px;font-weight:900}.desc{font-size:14px;color:var(--muted);margin-top:3px}
 .formula{background:#111318;border-radius:12px;padding:13px;font-size:17px;font-weight:900;line-height:1.5;margin-top:10px;word-break:break-word}
 .meta{font-size:14px;display:grid;gap:8px;margin-top:10px}.rapid{display:grid;gap:8px;margin-top:10px}.rapid-item{background:#13161b;border:1px solid var(--line);border-radius:12px;padding:11px;font-size:14px;line-height:1.6}
-.copy-area{margin-top:12px}.copybox{width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);border-radius:12px;background:#111318;color:var(--text);padding:12px;font-size:15px;line-height:1.55;font-family:inherit;-webkit-appearance:none}
+.copy-area{margin-top:12px}.copybox{width:100%;min-height:180px;resize:vertical;border:1px solid var(--line);border-radius:12px;background:#111318;color:var(--text);padding:12px;font-size:15px;line-height:1.55;font-family:inherit;-webkit-appearance:none}
 .copy-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}.copy-status{min-height:20px;color:var(--muted);font-size:13px;margin-top:6px}.hidden{display:none}
+.rule-note{font-size:13px;color:var(--muted);margin-top:10px;padding:10px 11px;border-left:3px solid var(--accent);background:#13161b;border-radius:8px}
 .note{font-size:12px;color:var(--muted);margin:12px 2px 0}@media(min-width:680px){.cards{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <main>
-<h1>ゲーム企画 80くじ</h1>
-<p class="lead">80個の「面白さパーツ」から重複なしでランダム抽選。変な組み合わせほど残す。</p>
+<h1>既視感破壊 80くじ</h1>
+<div class="version">v2.0 / 80アイテム固定</div>
+<p class="lead">既存ゲームの定番要素だけでなく、世界法則・入力制約・目的反転・代償・対象変換・現実モチーフなどを混ぜて、ジャンルに収束しにくい企画を作る。</p>
 
 <section class="panel">
 <div class="label">何枚引く？</div>
@@ -42,6 +43,7 @@ button:active{transform:scale(.985)}button.active,button.primary{background:var(
 <div class="actions">
 <button type="button" id="draw" class="primary">🎲 引く</button><button type="button" id="swap">1枚交換</button><button type="button" id="rapid">5セット</button><button type="button" id="reset">リセット</button>
 </div>
+<div class="rule-note">抽選はランダム。ただし複数枚では、できるだけ別カテゴリ同士を混ぜて既視感を壊す。</div>
 </section>
 
 <section class="panel">
@@ -56,7 +58,7 @@ button:active{transform:scale(.985)}button.active,button.primary{background:var(
 
 <section id="ideaPanel" class="panel hidden">
 <div class="label">強制発想</div><div id="formula" class="formula"></div>
-<div class="meta"><div><b>核：</b><span id="core"></span></div><div><b>問い：</b><span id="question"></span></div><div><b>縛り：</b>既存ゲーム名から逆算せず、出た要素だけから作る。</div></div>
+<div class="meta"><div><b>核：</b><span id="core"></span></div><div><b>問い：</b><span id="question"></span></div><div><b>縛り：</b>既存ゲーム名から逆算しない。「敵・HP・レベル・ダンジョン」は必要になるまで使わない。</div></div>
 </section>
 
 <section id="rapidPanel" class="panel hidden">
@@ -71,53 +73,171 @@ button:active{transform:scale(.985)}button.active,button.primary{background:var(
 <script>
 (()=>{
 const parts=[
-["連鎖失敗","小さなミスが次の事故を呼ぶ"],["自動化","作った仕組みが勝手に動く"],["人間心理読み","相手の考えや行動を読む"],["レア現象","めったに起きないことが起こる"],["自由配置","物を好きな場所に置ける"],["持ち帰り","生還・回収して初めて利益になる"],["未知の法則","最初は何が起きるか分からない"],["短い起承転結","1プレイに小さなドラマが生まれる"],["自分だけの戦術","正解が一つではない"],["大事故","派手な崩壊や事故が起きる"],
-["結果待ち","実行後の結果を見るのが楽しい"],["全ロスト","失敗すると全部失う"],["拠点発展","小さいものが徐々に育つ"],["視聴者だけ正解を知る","見る側に情報優位がある"],["ドミノ","1つの行動が順番に波及する"],["プレイヤースキル上達","本人の理解と腕が成長する"],["能力合成","複数能力を混ぜて使う"],["資源予測","足りるかどうかを読む"],["笑える失敗","ミス自体がコンテンツになる"],["コレクション","揃えたくなる"],
-["環境変化","天候・時間・地形などが変化する"],["隠された場所","秘密の場所を発見する"],["選択型進化","毎回違う成長方向を選ぶ"],["暴走型成長","強くなりすぎて制御不能になる"],["派手に失敗","失敗が視覚的に分かりやすい"],["再現不能な瞬間","同じことが二度と起きない"],["奇跡的成功","普通なら無理なことが通る"],["ルール作成","プレイヤー自身がルールを加える"],["相互依存","一人では成立しない"],["名前を付ける","対象への所有感を生む"],
-["予想外の乱入","突然第三者や事件が入る"],["状態異常連鎖","火→爆発→崩壊のようにつながる"],["条件付き現象","特定条件でだけ現象が起きる"],["足を引っ張れる","事故でも故意でも他人を邪魔できる"],["弱→強","明確なパワーアップを味わう"],["一目で状況が分かる","初見でも理解できる"],["リスク選択","安全か欲張るかを選ぶ"],["カスタム","見た目や性能を変える"],["建築","自分で構造物を作る"],["傷・履歴","長く使うほど歴史が残る"],
-["連鎖事故","事故が別の事故を呼ぶ"],["物理結果予測","崩れるか耐えるかなどを読む"],["他人の癖が攻略対象","人そのものを読む"],["意外な使い方","想定外の用途を見つける"],["時間制限","急がされることで緊張が生まれる"],["同期","タイミングを合わせる"],["ランダム生成","毎回状況が変わる"],["秘密のルール","表向きと違う法則がある"],["展示","作ったものを他人に見せる"],["自分の判断で事故る","自業自得の失敗が起きる"],
-["小→巨大","サイズの成長を楽しむ"],["レア出現","珍しいものがたまに出る"],["組み立て","パーツから何かを作る"],["相手行動予測","次の動きを読む"],["取り返し","失敗後も立て直せる"],["数が増える","少数から大量へ増殖する"],["誤解","意思疎通のズレが遊びになる"],["禁断の選択","やるなと言われたことを試したくなる"],["連鎖成長","育つほどさらに育ちやすくなる"],["個体差","同じ種類でも特徴が違う"],
-["軌道予測","投げる・飛ぶ・落ちる軌道を読む"],["1人だけ別情報","プレイヤー間に情報格差がある"],["徐々に理解する世界","遊ぶほど法則が分かる"],["物理事故","想定からズレる挙動が起きる"],["確率判断","運を含めて判断する"],["組み合わせ発見","A+Bから新しい結果を見つける"],["分業","役割を分けて進める"],["1人だけ裏切り候補","協力の中に疑念がある"],["ギリギリ復活","終わったと思ったところから助かる"],["視聴者も予想できる","見る側も結果を考えられる"],
-["失敗の痕跡が残る","過去のミスが世界に蓄積する"],["成長が見た目に出る","強さが外見にも反映される"],["経済連鎖","稼ぐ→投資→さらに稼ぐ"],["短い挑戦の反復","短時間で何度も試せる"],["ループする改善","失敗→修正→再挑戦が自然に回る"],["状況だけ変わる","操作は同じでも状況が毎回違う"],["生物育成","育て方で結果が変わる"],["持ちすぎると危険","欲張るほどリスクが上がる"],["観察が楽しい","操作より結果を見ること自体が楽しい"],["キャラ差が出る","人によって遊び方が大きく変わる"]
+["世界法則","見られていない物だけ動く","視界に入った瞬間だけ世界が静止する"],
+["世界法則","重い物ほど上に落ちる","質量が増えるほど重力方向が逆転する"],
+["世界法則","名前のない物は存在できない","名前を失った物から世界から消えていく"],
+["世界法則","嘘をつくと物理法則が変わる","発言の真偽が重力や摩擦に影響する"],
+["世界法則","同じ物が3つ揃うと融合する","三つ揃った瞬間に別の性質へ変化する"],
+["世界法則","触れた物だけ時間が止まる","操作するほど世界に静止物が増える"],
+["世界法則","音量が質量になる","大きな音ほど物理的に重くなる"],
+["世界法則","影が本体より先に動く","影の行動を本体が後から追いかける"],
+
+["入力制約","一度押した操作は10秒続く","短く修正できず、判断そのものが危険になる"],
+["入力制約","1分に1回しか操作できない","一回の入力を長く見守る必要がある"],
+["入力制約","操作するたびボタンの意味が変わる","同じ入力が次回は別の作用になる"],
+["入力制約","反動でしか移動できない","物を押す・投げる反作用だけで移動する"],
+["入力制約","画面を見ている間は動けない","確認と行動を同時にできない"],
+["入力制約","同じ操作を連続で使えない","毎回別の手段へ切り替える必要がある"],
+["入力制約","方向を直接選べない","周囲の物体を利用して進行方向を作る"],
+["入力制約","未来の操作を予約する","今ではなく数秒後の自分へ命令を置く"],
+
+["目的反転","完成させないのが目的","壊れず未完成の絶妙な状態を維持する"],
+["目的反転","何も壊さず事故を起こす","被害ゼロのまま大騒動だけ発生させる"],
+["目的反転","一番遅くゴールする","停止せず、最遅を狙う"],
+["目的反転","勝者を作らない","誰か一人が勝つと全員失敗になる"],
+["目的反転","正解を見つけても使わない","理解した法則を別の方法で迂回する"],
+["目的反転","失敗させるが気づかせない","相手が自分の判断だと思う形で失敗を誘う"],
+["目的反転","目的が途中で入れ替わる","過去の行動が新しい目的では邪魔になる"],
+["目的反転","ゴールを自分で移動させる","到達するのではなく到達可能な場所を作る"],
+
+["代償","強くなるほど情報が消える","能力上昇と引き換えにUIや記憶が欠ける"],
+["代償","拾うほど主人公が別人になる","所持物が性格・能力・立場を上書きする"],
+["代償","セーブするたび何か一つ失う","安全確保そのものにコストがある"],
+["代償","便利な道具ほど世界を壊す","高性能な道具ほど法則へ副作用を起こす"],
+["代償","成功するほど次回の操作が減る","上手くいくほど自由度が下がる"],
+["代償","見つけるほど地図が消える","探索進行と同時に既知情報が失われる"],
+["代償","使った物が次回の障害になる","便利だった手段が未来に敵対する"],
+["代償","時間を稼ぐほど未来が難しくなる","現在を延命すると後半の環境が悪化する"],
+
+["対象変換","UIが生物になる","ボタンやゲージが逃げたり眠ったりする"],
+["対象変換","セーブデータがNPCになる","過去の記録が世界内キャラクターとして現れる"],
+["対象変換","音が物体になる","発生した音を持つ・積む・投げることができる"],
+["対象変換","ルールがアイテムになる","法則を拾い、捨て、交換できる"],
+["対象変換","敵が地形になる","敵対存在が壁・床・坂として機能する"],
+["対象変換","体力が場所になる","HPではなく安全に存在できる領域が減る"],
+["対象変換","所持品が性格になる","持ち物構成が主人公の行動傾向を決める"],
+["対象変換","会話が建築材料になる","言葉を足場や壁として世界に残せる"],
+
+["現実モチーフ","検品","大量の物から微妙な違いを見抜き、判定の責任を負う"],
+["現実モチーフ","測量","距離・高さ・角度を測る行為自体を遊びにする"],
+["現実モチーフ","発酵","時間と環境で中身が勝手に変質していく"],
+["現実モチーフ","引っ越し","限られた空間へ物を運び、詰め、壊さず移す"],
+["現実モチーフ","葬儀","儀式・順序・人間関係を扱う"],
+["現実モチーフ","会議","発言・沈黙・合意形成そのものをシステム化する"],
+["現実モチーフ","道路工事","使われ続ける場所を止めずに作り替える"],
+["現実モチーフ","清掃","汚れを消すだけでなく、何を残すか判断する"],
+
+["認知情報","見落とした物ほど重要になる","注意を向けなかった対象が後から価値を持つ"],
+["認知情報","記憶した内容が少しずつ嘘になる","プレイヤーの記録自体が時間で変質する"],
+["認知情報","プレイヤーごとに因果が違う","同じ行動でも人によって結果の法則が異なる"],
+["認知情報","チュートリアルが一部だけ間違う","説明を信じるか実験するかがゲームになる"],
+["認知情報","NPCがプレイヤーの癖を誤学習する","AIが間違った人物像を作り、それに合わせて動く"],
+["認知情報","未来の結果だけ先に見える","原因を知らないまま結果から逆算する"],
+["認知情報","正解を知るほど選択肢が減る","理解が自由を狭める"],
+["認知情報","見ていない場所の情報だけ正確","確認した瞬間に情報が曖昧になる"],
+
+["時間空間","過去の自分が物理的に残る","以前の行動が次回も同じ場所で繰り返される"],
+["時間空間","距離が時間になる","遠くへ行くほど未来へ進み、戻ると過去へ近づく"],
+["時間空間","近づくほど対象が遠ざかる","直接追うほど到達不能になる"],
+["時間空間","部屋の中の方が外より広い","空間サイズの常識が接続ごとに崩れる"],
+["時間空間","失敗した場所が次回の入口になる","失敗地点が次プレイの開始地点になる"],
+["時間空間","一歩ごとに世界の縮尺が変わる","歩行が巨大化・縮小を兼ねる"],
+["時間空間","未来から順番に出来事が起きる","結果→途中→原因の順で体験する"],
+["時間空間","物を置くと別の場所が削れる","空間総量が一定で配置が別空間を侵食する"],
+
+["社会関係","NPCがプレイヤーを攻略する","NPC側が行動パターンを研究し対策を組む"],
+["社会関係","仲間の成功が自分の失敗になる","協力と競争が同じ行動に共存する"],
+["社会関係","全員の勝利条件が違うが誰も知らない","自分の目的すら観察から推測する"],
+["社会関係","評判が物理パラメータになる","周囲の評価で重さ・速度・大きさが変化する"],
+["社会関係","観察されるたび役割が変わる","他者に見られることで立場や能力が切り替わる"],
+["社会関係","他人のミスを引き取れる","誰の失敗として処理するか選べる"],
+["社会関係","観客の予想が世界へ影響する","多く予想された結果ほど起きにくくなる"],
+["社会関係","約束した行動しかできない","宣言した予定が操作制約になる"],
+
+["創発事故","物理事故","想定からズレた挙動そのものが展開を作る"],
+["創発事故","自分の判断で事故る","原因が明確に自分の選択へ戻ってくる"],
+["創発事故","失敗の痕跡が世界に残る","過去のやらかしが次回の地形や条件になる"],
+["創発事故","予想外の乱入","第三者や現象が計画へ割り込む"],
+["創発事故","連鎖事故","小さなミスが別システムへ伝播する"],
+["創発事故","奇跡的成功","無理そうな状況が偶然の相互作用で通る"],
+["創発事故","ルール同士が衝突する","複数の法則が同時成立し矛盾を起こす"],
+["創発事故","何もしないことが連鎖を起こす","未操作が世界側の行動を進める"]
 ];
+
 let count=4,current=[],rapidSets=[];
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-function rnd(max){if(max<=1)return 0;if(crypto&&crypto.getRandomValues){const range=4294967296,limit=range-(range%max),a=new Uint32Array(1);do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%max}return Math.floor(Math.random()*max)}
-function draw(n,exclude=[]){const blocked=new Set(exclude),pool=parts.map((_,i)=>i).filter(i=>!blocked.has(i)),out=[];for(let k=0;k<Math.min(n,pool.length);k++){const j=rnd(pool.length);out.push(pool[j]);pool.splice(j,1)}return out}
-async function copyText(text,statusEl){
-  if(!text)return;
-  let ok=false;
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);ok=true}}catch(_){}
-  if(!ok){
-    const ta=document.createElement("textarea");
-    ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";ta.style.pointerEvents="none";
-    document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);
-    try{ok=document.execCommand("copy")}catch(_){}
-    ta.remove();
+function rnd(max){if(max<=1)return 0;if(window.crypto&&crypto.getRandomValues){const range=4294967296,limit=range-(range%max),a=new Uint32Array(1);do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%max}return Math.floor(Math.random()*max)}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function draw(n,exclude=[]){
+  const blocked=new Set(exclude),available=parts.map((_,i)=>i).filter(i=>!blocked.has(i)),out=[];
+  const byCat={};available.forEach(i=>{const cat=parts[i][0];(byCat[cat]||(byCat[cat]=[])).push(i)});
+  const cats=shuffle(Object.keys(byCat));
+  for(const cat of cats){
+    if(out.length>=n)break;
+    const pool=byCat[cat];out.push(pool[rnd(pool.length)]);
   }
-  if(statusEl){statusEl.textContent=ok?"コピーしました":"コピーできませんでした。下の欄を長押ししてコピーしてください。";setTimeout(()=>{statusEl.textContent=""},2200)}
+  if(out.length<n){
+    const used=new Set(out),rest=available.filter(i=>!used.has(i));
+    while(out.length<n&&rest.length){const j=rnd(rest.length);out.push(rest[j]);rest.splice(j,1)}
+  }
+  return out;
+}
+function replacementFor(pos){
+  const others=current.filter((_,i)=>i!==pos),usedCats=new Set(others.map(i=>parts[i][0]));
+  let pool=parts.map((_,i)=>i).filter(i=>!others.includes(i)&&i!==current[pos]&&!usedCats.has(parts[i][0]));
+  if(!pool.length)pool=parts.map((_,i)=>i).filter(i=>!others.includes(i)&&i!==current[pos]);
+  return pool.length?pool[rnd(pool.length)]:null;
+}
+async function copyText(text,statusEl){
+  if(!text)return;let ok=false;
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);ok=true}}catch(_){}
+  if(!ok){const ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);try{ok=document.execCommand("copy")}catch(_){}ta.remove()}
+  if(statusEl){statusEl.textContent=ok?"コピーしました":"コピーできませんでした。下の欄を長押ししてコピーしてください。";setTimeout(()=>statusEl.textContent="",2200)}
 }
 function currentCopyText(){
   if(!current.length)return "";
-  const lines=["【ゲーム企画80くじ】","抽選："+current.length+"枚",""];
-  current.forEach((i,n)=>lines.push((n+1)+". "+parts[i][0]+" — "+parts[i][1]));
-  lines.push("","組み合わせ："+current.map(i=>parts[i][0]).join(" × "));
-  const q=$("#question")?$("#question").textContent:"";
-  if(q)lines.push("問い："+q);
+  const lines=["【既視感破壊80くじ v2】","抽選："+current.length+"枚",""];
+  current.forEach((i,n)=>lines.push((n+1)+". ["+parts[i][0]+"] "+parts[i][1]+" — "+parts[i][2]));
+  lines.push("","組み合わせ："+current.map(i=>parts[i][1]).join(" × "));
+  const q=$("#question")?$("#question").textContent:"";if(q)lines.push("問い："+q);
   return lines.join("\n");
 }
 function rapidCopyText(){
   if(!rapidSets.length)return "";
-  const lines=["【ゲーム企画80くじ｜5セット】",""];
-  rapidSets.forEach((set,n)=>lines.push((n+1)+". "+set.map(i=>parts[i][0]).join(" × ")));
+  const lines=["【既視感破壊80くじ v2｜5セット】",""];
+  rapidSets.forEach((set,n)=>lines.push((n+1)+". "+set.map(i=>"["+parts[i][0]+"] "+parts[i][1]).join(" × ")));
   return lines.join("\n");
 }
 function syncCopyText(){const el=$("#copyText");if(el)el.value=currentCopyText()}
-function card(i){const a=document.createElement("article");a.className="card";const n=document.createElement("div");n.className="num";n.textContent=String(i+1).padStart(2,"0");const b=document.createElement("div"),nm=document.createElement("div"),ds=document.createElement("div");nm.className="name";nm.textContent=parts[i][0];ds.className="desc";ds.textContent=parts[i][1];b.append(nm,ds);a.append(n,b);return a}
-function render(){const c=$("#cards");c.replaceChildren(...current.map(card));if(!current.length){$("#ideaPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";syncCopyText();return}const names=current.map(i=>parts[i][0]);$("#ideaPanel").classList.remove("hidden");$("#formula").textContent=names.join(" × ");$("#core").textContent="「"+names[0]+"」を主役にして、残りを全部ルールとして混ぜる。";const q=["この要素が全部同時に成立する最小の遊びは何か？","最初の30秒で何をして、1分後に何が起きれば面白いか？","成功より失敗の方が面白くなる形にするとどうなるか？","操作を3種類以内にしたら何が残るか？","実況者が思わず叫ぶ瞬間を1つ作るなら何か？","既存ジャンル名を使わず、この要素だけで1ループを説明できるか？"];$("#question").textContent=q[rnd(q.length)];$("#status").textContent=current.length+"枚："+current.map(i=>String(i+1).padStart(2,"0")).join("・");syncCopyText()}
+function card(i){
+  const a=document.createElement("article");a.className="card";
+  const n=document.createElement("div");n.className="num";n.textContent=String(i+1).padStart(2,"0");
+  const b=document.createElement("div"),cat=document.createElement("div"),nm=document.createElement("div"),ds=document.createElement("div");
+  cat.className="cat";cat.textContent=parts[i][0];nm.className="name";nm.textContent=parts[i][1];ds.className="desc";ds.textContent=parts[i][2];
+  b.append(cat,nm,ds);a.append(n,b);return a
+}
+function render(){
+  $("#cards").replaceChildren(...current.map(card));
+  if(!current.length){$("#ideaPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";syncCopyText();return}
+  const names=current.map(i=>parts[i][1]),cats=current.map(i=>parts[i][0]);
+  $("#ideaPanel").classList.remove("hidden");$("#formula").textContent=names.join(" × ");
+  $("#core").textContent="最も説明しにくい要素を主役にし、残りをルール・目的・代償・舞台のどれかへ割り当てる。";
+  const q=[
+    "この要素を全部『文字通り』実装したら、プレイヤーは最初の60秒で何をする？",
+    "敵・HP・レベルを使わず、この組み合わせだけで1ループを説明できるか？",
+    "この中で一番ゲームっぽくない要素を主役にすると何が起きる？",
+    "成功条件を一文にし、失敗した方が面白くなる仕組みを一つ足せるか？",
+    "見ている人が5秒で状況を理解できる画面にすると、何が見える？",
+    "既存ジャンル名を禁止して、プレイヤーの動詞を3つだけ決めると何になる？",
+    "この4要素のうち2つを衝突させ、矛盾そのものを遊びにできるか？",
+    "主人公を人間にしない場合、このルールは何を操作するゲームになる？"
+  ];
+  $("#question").textContent=q[rnd(q.length)];
+  $("#status").textContent=current.length+"枚 / "+cats.join("・");syncCopyText()
+}
 $("#draw").addEventListener("click",()=>{current=draw(count);$("#rapidPanel").classList.add("hidden");render()});
-$("#swap").addEventListener("click",()=>{if(!current.length)return;const p=rnd(current.length),r=draw(1,current);if(r.length)current[p]=r[0];render()});
-$("#rapid").addEventListener("click",()=>{const box=$("#rapidResults");box.replaceChildren();rapidSets=[];for(let s=0;s<5;s++){const set=draw(count);rapidSets.push(set);const row=document.createElement("div");row.className="rapid-item";row.textContent=(s+1)+". "+set.map(i=>parts[i][0]).join(" × ");box.append(row)}$("#rapidPanel").classList.remove("hidden")});
+$("#swap").addEventListener("click",()=>{if(!current.length)return;const pos=rnd(current.length),r=replacementFor(pos);if(r!==null)current[pos]=r;render()});
+$("#rapid").addEventListener("click",()=>{const box=$("#rapidResults");box.replaceChildren();rapidSets=[];for(let s=0;s<5;s++){const set=draw(count);rapidSets.push(set);const row=document.createElement("div");row.className="rapid-item";row.textContent=(s+1)+". "+set.map(i=>"["+parts[i][0]+"] "+parts[i][1]).join(" × ");box.append(row)}$("#rapidPanel").classList.remove("hidden")});
 $("#copyCurrent").addEventListener("click",()=>copyText(currentCopyText(),$("#copyStatus")));
 $("#copyRapid").addEventListener("click",()=>copyText(rapidCopyText(),$("#rapidCopyStatus")));
 $("#reset").addEventListener("click",()=>{current=[];rapidSets=[];$("#cards").replaceChildren();$("#ideaPanel").classList.add("hidden");$("#rapidPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";syncCopyText()});
