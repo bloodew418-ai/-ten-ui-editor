@@ -22,7 +22,9 @@ button:active{transform:scale(.985)}button.active,button.primary{background:var(
 .cards{display:grid;gap:10px;margin-top:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;grid-template-columns:36px 1fr;gap:10px}
 .num{font-size:13px;color:var(--muted);font-weight:800;padding-top:2px}.name{font-size:17px;font-weight:900}.desc{font-size:14px;color:var(--muted);margin-top:3px}
 .formula{background:#111318;border-radius:12px;padding:13px;font-size:17px;font-weight:900;line-height:1.5;margin-top:10px;word-break:break-word}
-.meta{font-size:14px;display:grid;gap:8px;margin-top:10px}.rapid{display:grid;gap:8px;margin-top:10px}.rapid-item{background:#13161b;border:1px solid var(--line);border-radius:12px;padding:11px;font-size:14px;line-height:1.6}.hidden{display:none}
+.meta{font-size:14px;display:grid;gap:8px;margin-top:10px}.rapid{display:grid;gap:8px;margin-top:10px}.rapid-item{background:#13161b;border:1px solid var(--line);border-radius:12px;padding:11px;font-size:14px;line-height:1.6}
+.copy-area{margin-top:12px}.copybox{width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);border-radius:12px;background:#111318;color:var(--text);padding:12px;font-size:15px;line-height:1.55;font-family:inherit;-webkit-appearance:none}
+.copy-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}.copy-status{min-height:20px;color:var(--muted);font-size:13px;margin-top:6px}.hidden{display:none}
 .note{font-size:12px;color:var(--muted);margin:12px 2px 0}@media(min-width:680px){.cards{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -42,14 +44,27 @@ button:active{transform:scale(.985)}button.active,button.primary{background:var(
 </div>
 </section>
 
-<section class="panel"><div class="label">今回の組み合わせ</div><div id="cards" class="cards"></div></section>
+<section class="panel">
+<div class="label">今回の組み合わせ</div>
+<div id="cards" class="cards"></div>
+<div class="copy-area">
+<textarea id="copyText" class="copybox" readonly aria-label="コピペ用抽選結果"></textarea>
+<div class="copy-actions"><button type="button" id="copyCurrent" class="primary">📋 結果をコピー</button></div>
+<div id="copyStatus" class="copy-status" aria-live="polite"></div>
+</div>
+</section>
 
 <section id="ideaPanel" class="panel hidden">
 <div class="label">強制発想</div><div id="formula" class="formula"></div>
 <div class="meta"><div><b>核：</b><span id="core"></span></div><div><b>問い：</b><span id="question"></span></div><div><b>縛り：</b>既存ゲーム名から逆算せず、出た要素だけから作る。</div></div>
 </section>
 
-<section id="rapidPanel" class="panel hidden"><div class="label">5セット連続</div><div id="rapidResults" class="rapid"></div></section>
+<section id="rapidPanel" class="panel hidden">
+<div class="label">5セット連続</div>
+<div id="rapidResults" class="rapid"></div>
+<div class="copy-actions"><button type="button" id="copyRapid">📋 5セットをコピー</button></div>
+<div id="rapidCopyStatus" class="copy-status" aria-live="polite"></div>
+</section>
 <p class="note">iPhoneはSafariの共有メニュー →「ホーム画面に追加」でアプリ風に使えます。</p>
 </main>
 
@@ -65,16 +80,47 @@ const parts=[
 ["軌道予測","投げる・飛ぶ・落ちる軌道を読む"],["1人だけ別情報","プレイヤー間に情報格差がある"],["徐々に理解する世界","遊ぶほど法則が分かる"],["物理事故","想定からズレる挙動が起きる"],["確率判断","運を含めて判断する"],["組み合わせ発見","A+Bから新しい結果を見つける"],["分業","役割を分けて進める"],["1人だけ裏切り候補","協力の中に疑念がある"],["ギリギリ復活","終わったと思ったところから助かる"],["視聴者も予想できる","見る側も結果を考えられる"],
 ["失敗の痕跡が残る","過去のミスが世界に蓄積する"],["成長が見た目に出る","強さが外見にも反映される"],["経済連鎖","稼ぐ→投資→さらに稼ぐ"],["短い挑戦の反復","短時間で何度も試せる"],["ループする改善","失敗→修正→再挑戦が自然に回る"],["状況だけ変わる","操作は同じでも状況が毎回違う"],["生物育成","育て方で結果が変わる"],["持ちすぎると危険","欲張るほどリスクが上がる"],["観察が楽しい","操作より結果を見ること自体が楽しい"],["キャラ差が出る","人によって遊び方が大きく変わる"]
 ];
-let count=4,current=[];
+let count=4,current=[],rapidSets=[];
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 function rnd(max){if(max<=1)return 0;if(crypto&&crypto.getRandomValues){const range=4294967296,limit=range-(range%max),a=new Uint32Array(1);do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%max}return Math.floor(Math.random()*max)}
 function draw(n,exclude=[]){const blocked=new Set(exclude),pool=parts.map((_,i)=>i).filter(i=>!blocked.has(i)),out=[];for(let k=0;k<Math.min(n,pool.length);k++){const j=rnd(pool.length);out.push(pool[j]);pool.splice(j,1)}return out}
+async function copyText(text,statusEl){
+  if(!text)return;
+  let ok=false;
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);ok=true}}catch(_){}
+  if(!ok){
+    const ta=document.createElement("textarea");
+    ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";ta.style.pointerEvents="none";
+    document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);
+    try{ok=document.execCommand("copy")}catch(_){}
+    ta.remove();
+  }
+  if(statusEl){statusEl.textContent=ok?"コピーしました":"コピーできませんでした。下の欄を長押ししてコピーしてください。";setTimeout(()=>{statusEl.textContent=""},2200)}
+}
+function currentCopyText(){
+  if(!current.length)return "";
+  const lines=["【ゲーム企画80くじ】","抽選："+current.length+"枚",""];
+  current.forEach((i,n)=>lines.push((n+1)+". "+parts[i][0]+" — "+parts[i][1]));
+  lines.push("","組み合わせ："+current.map(i=>parts[i][0]).join(" × "));
+  const q=$("#question")?$("#question").textContent:"";
+  if(q)lines.push("問い："+q);
+  return lines.join("\n");
+}
+function rapidCopyText(){
+  if(!rapidSets.length)return "";
+  const lines=["【ゲーム企画80くじ｜5セット】",""];
+  rapidSets.forEach((set,n)=>lines.push((n+1)+". "+set.map(i=>parts[i][0]).join(" × ")));
+  return lines.join("\n");
+}
+function syncCopyText(){const el=$("#copyText");if(el)el.value=currentCopyText()}
 function card(i){const a=document.createElement("article");a.className="card";const n=document.createElement("div");n.className="num";n.textContent=String(i+1).padStart(2,"0");const b=document.createElement("div"),nm=document.createElement("div"),ds=document.createElement("div");nm.className="name";nm.textContent=parts[i][0];ds.className="desc";ds.textContent=parts[i][1];b.append(nm,ds);a.append(n,b);return a}
-function render(){const c=$("#cards");c.replaceChildren(...current.map(card));if(!current.length){$("#ideaPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";return}const names=current.map(i=>parts[i][0]);$("#ideaPanel").classList.remove("hidden");$("#formula").textContent=names.join(" × ");$("#core").textContent="「"+names[0]+"」を主役にして、残りを全部ルールとして混ぜる。";const q=["この要素が全部同時に成立する最小の遊びは何か？","最初の30秒で何をして、1分後に何が起きれば面白いか？","成功より失敗の方が面白くなる形にするとどうなるか？","操作を3種類以内にしたら何が残るか？","実況者が思わず叫ぶ瞬間を1つ作るなら何か？","既存ジャンル名を使わず、この要素だけで1ループを説明できるか？"];$("#question").textContent=q[rnd(q.length)];$("#status").textContent=current.length+"枚："+current.map(i=>String(i+1).padStart(2,"0")).join("・")}
+function render(){const c=$("#cards");c.replaceChildren(...current.map(card));if(!current.length){$("#ideaPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";syncCopyText();return}const names=current.map(i=>parts[i][0]);$("#ideaPanel").classList.remove("hidden");$("#formula").textContent=names.join(" × ");$("#core").textContent="「"+names[0]+"」を主役にして、残りを全部ルールとして混ぜる。";const q=["この要素が全部同時に成立する最小の遊びは何か？","最初の30秒で何をして、1分後に何が起きれば面白いか？","成功より失敗の方が面白くなる形にするとどうなるか？","操作を3種類以内にしたら何が残るか？","実況者が思わず叫ぶ瞬間を1つ作るなら何か？","既存ジャンル名を使わず、この要素だけで1ループを説明できるか？"];$("#question").textContent=q[rnd(q.length)];$("#status").textContent=current.length+"枚："+current.map(i=>String(i+1).padStart(2,"0")).join("・");syncCopyText()}
 $("#draw").addEventListener("click",()=>{current=draw(count);$("#rapidPanel").classList.add("hidden");render()});
 $("#swap").addEventListener("click",()=>{if(!current.length)return;const p=rnd(current.length),r=draw(1,current);if(r.length)current[p]=r[0];render()});
-$("#rapid").addEventListener("click",()=>{const box=$("#rapidResults");box.replaceChildren();for(let s=0;s<5;s++){const set=draw(count),row=document.createElement("div");row.className="rapid-item";row.textContent=(s+1)+". "+set.map(i=>parts[i][0]).join(" × ");box.append(row)}$("#rapidPanel").classList.remove("hidden")});
-$("#reset").addEventListener("click",()=>{current=[];$("#cards").replaceChildren();$("#ideaPanel").classList.add("hidden");$("#rapidPanel").classList.add("hidden");$("#status").textContent=count+"枚引き"});
+$("#rapid").addEventListener("click",()=>{const box=$("#rapidResults");box.replaceChildren();rapidSets=[];for(let s=0;s<5;s++){const set=draw(count);rapidSets.push(set);const row=document.createElement("div");row.className="rapid-item";row.textContent=(s+1)+". "+set.map(i=>parts[i][0]).join(" × ");box.append(row)}$("#rapidPanel").classList.remove("hidden")});
+$("#copyCurrent").addEventListener("click",()=>copyText(currentCopyText(),$("#copyStatus")));
+$("#copyRapid").addEventListener("click",()=>copyText(rapidCopyText(),$("#rapidCopyStatus")));
+$("#reset").addEventListener("click",()=>{current=[];rapidSets=[];$("#cards").replaceChildren();$("#ideaPanel").classList.add("hidden");$("#rapidPanel").classList.add("hidden");$("#status").textContent=count+"枚引き";syncCopyText()});
 $$('#countBtns button').forEach(btn=>btn.addEventListener("click",()=>{count=Math.max(1,Math.min(5,Number(btn.dataset.count)||4));$$('#countBtns button').forEach(b=>b.classList.remove("active"));btn.classList.add("active");$("#status").textContent=count+"枚引き"}));
 current=draw(count);render();
 })();
